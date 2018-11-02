@@ -20,28 +20,17 @@
 #ifndef MYAI_LOCK
 #define MYAI_LOCK
 
-#include <map>
-#include <stack>
-#include <string>
 #include "Agent.hpp"
+#include <map>
+#include <vector>
+#include <array>
+#include <stack>
 
 using namespace std;
-
 class MyAI : public Agent
 {
 public:
 	MyAI ( void );
-
-
-	void reversePos();
-	Action updatePos();
-	Action turnLeft();
-	Action turnRight();
-	Action updateDir( char turn );
-	void init_map();
-	void backtrack();
-	void print_menu( bool print, bool stench, bool breeze, bool glitter,
-	bool bump, bool scream );
 
 	Action getAction
 	(
@@ -51,28 +40,36 @@ public:
 		bool bump,
 		bool scream
 	);
-	
+
 	// ======================================================================
 	// YOUR CODE BEGINS
 	// ======================================================================
-	
-	bool has_gold = 0;
-	bool has_arrow = 0;
-	bool wumpus_dead = 0;
-	bool go_home = 0;
-	array<int,2> curr_pos = {{0, 0}}; // (R,C)
-	array<int,2> last_pos = {{0, 0}};
-	array<int,2> max_dim = {{5, 5}}; // include 0
-	// array<int,4> curr_dir = {{0, 1, 2, 3}}
-	int curr_dir = 2; // L, U, R, D
-	int last_dir = -1;
-	int needed_dir = -1;
-	map< array<int,2>, map<std::string, int> > world;
-	stack < array<int,2> > steps; // Use to go back to beginning
-	const bool ERROR_CHECK = 1;
+	int dir = 0; //index of the compas array. +1 to turn_right. remember to mod.
+	std::string compass[4] = {"R","D","L","U"};
+	bool worm = true;
+	bool arrow = true;
+	bool gold = false;
+	int num_moves = 0;
+	int position[2] = {0,0}; // Current Y,X Position
+	int width = 6;
+	int height = 6;
+	bool left_home = false;
+	//std::map<int[2],std::map<std::string,int>> world;
+	map<array<int,2>,std::map<std::string,int>> world;
+	stack<array<int,2>> steps;
+	bool start = true;
+	int next_pos[2] = {-1,-1};
+
+	// Turn on if want to print comments
+	const bool ERROR_CHECK = true;
 
 
-	
+	Action turnLeft();
+	Action goForward();
+	Action turnRight();
+	void init_map();
+	void update_map(bool stench,bool breeze);
+
 	// ======================================================================
 	// YOUR CODE ENDS
 	// ======================================================================
